@@ -4,7 +4,7 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
 def main():
-    rss_url = 'https://rss.app/feeds/RAU0UmLGELQ6vdB9.xml'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
+    rss_url = 'http://fetchrss.com/rss/66924131383244f7540a82546692410109547ffc7409ebb3.xml'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
     feed = feedparser.parse(rss_url)
 
     # طباعة عنوان الـ Feed
