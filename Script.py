@@ -1,3 +1,4 @@
+import os
 import requests
 import feedparser
 from google.oauth2.credentials import Credentials
@@ -26,6 +27,15 @@ def main():
     post_title = latest_entry.title
     post_content = latest_entry.summary
 
+    # التحقق مما إذا كان الإدخال الأخير قد نُشر بالفعل
+    latest_entry_id = latest_entry.id
+    if os.path.exists('latest_entry.txt'):
+        with open('latest_entry.txt', 'r') as f:
+            last_published_id = f.read().strip()
+            if last_published_id == latest_entry_id:
+                print("The latest entry has already been published.")
+                return
+    
     blog_id = '3757445964290119377'
     url = f'https://www.googleapis.com/blogger/v3/blogs/{blog_id}/posts/'
 
@@ -53,7 +63,13 @@ def main():
     }
 
     response = requests.post(url, headers=headers, json=post_data)
-    print(response.status_code, response.json())
+    if response.status_code == 200:
+        print("Post published successfully.")
+        # حفظ معرف الإدخال المنشور الأخير
+        with open('latest_entry.txt', 'w') as f:
+            f.write(latest_entry_id)
+    else:
+        print(response.status_code, response.json())
 
 if __name__ == '__main__':
     main()
