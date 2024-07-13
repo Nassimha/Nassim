@@ -1,8 +1,37 @@
 import os
 import requests
 import feedparser
+from bs4 import BeautifulSoup
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
+
+def extract_manga_info(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    # استخراج الصور
+    images = soup.find_all('img')
+    image_urls = [img['src'] for img in images if 'src' in img.attrs]
+
+    # استخراج القصة (synopsis)
+    synopsis = soup.find('p', id='synopsis')
+    synopsis_text = synopsis.get_text(strip=True) if synopsis else 'No synopsis found'
+
+    # استخراج الفصول (chapters)
+    chapters_div = soup.find('div', id='extra-info')
+    chapters_info = {}
+    if chapters_div:
+        chapters = chapters_div.find_all('div', class_='y6x11p')
+        for chapter in chapters:
+            title = chapter.contents[0].strip()
+            detail = chapter.find('span', class_='dt').get_text(strip=True)
+            chapters_info[title] = detail
+
+    return {
+        'images': image_urls,
+        'synopsis': synopsis_text,
+        'chapters_info': chapters_info
+    }
 
 def main():
     rss_url = 'https://thunderscans.com/feed/'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
@@ -36,6 +65,31 @@ def main():
                 print("The latest entry has already been published.")
                 return
     
+    # رابط إلى صفحة المانجا
+    manga_url = latest_entry.link
+    manga_info = extract_manga_info(manga_url)
+
+    # جمع محتوى المنشور
+    post_content = f"""
+    <span><!--more--></span>
+    <div class="separator" style="clear: both;">
+        <a href="{manga_url}" style="display: block; padding: 1em 0; text-align: center;">
+            <img alt="" border="0" height="200" data-original-height="1030" data-original-width="720" src="{manga_info['images'][0] if manga_info['images'] else ''}" style="display: block; padding: 1em 0; text-align: center;">
+        </a>
+    </div>
+    <div id="custom-hero" style="clear: both;">
+        <img alt="" border="0" data-original-height="630" data-original-width="1200" src="{manga_info['images'][0] if manga_info['images'] else ''}">
+    </div>
+    <div id='extra-info'>
+        <div class="y6x11p">الفصول <span class="dt">{manga_info['chapters_info'].get('الفصول', 'N/A')}</span></div>
+        <div class="y6x11p">تاريخ النشر <span class="dt">{manga_info['chapters_info'].get('تاريخ النشر', 'N/A')}</span></div>
+        <div class="y6x11p">النوع <span class="dt">{manga_info['chapters_info'].get('النوع', 'مانهوا كورية')}</span></div>
+        <div class="y6x11p">الكاتب <span class="dt">{manga_info['chapters_info'].get('الكاتب', 'غير معروف')}</span></div>
+        <div class="y6x11p">الرسام <span class="dt">{manga_info['chapters_info'].get('الرسام', 'غير معروف')}</span></div>
+    </div>
+    <p id="synopsis">{manga_info['synopsis']}</p>
+    """
+
     blog_id = '3757445964290119377'
     url = f'https://www.googleapis.com/blogger/v3/blogs/{blog_id}/posts/'
 
