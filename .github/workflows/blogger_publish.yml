@@ -2,7 +2,7 @@ name: Publish Manga to Blogger
 
 on:
   schedule:
-  - cron: '*/30 * * * *'  # يشغل الكود كل ساعة. يمكنك تعديل الجدول حسب احتياجاتك.
+  - cron: '* * * * *'  # يشغل الكود كل ساعة. يمكنك تعديل الجدول حسب احتياجاتك.
   workflow_dispatch:
 
 jobs:
