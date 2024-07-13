@@ -7,9 +7,17 @@ def main():
     rss_url = 'https://teamxnovel.com/'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
     feed = feedparser.parse(rss_url)
 
-    # إضافة سجل لطباعة عدد العناصر في الـ Feed
+    # طباعة عنوان الـ Feed
+    print(f"Feed title: {feed.feed.title if 'title' in feed.feed else 'No title found'}")
+    
+    # طباعة جميع البيانات التي تم تحليلها
+    print("Feed parsed:", feed)
+    print("Feed entries:", feed.entries)
+
+    # طباعة عدد العناصر في الـ Feed
     print(f"Number of entries in feed: {len(feed.entries)}")
 
+    # التحقق مما إذا كانت القائمة فارغة
     if not feed.entries:
         print("No entries found in RSS feed.")
         return
