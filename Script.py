@@ -1,21 +1,22 @@
 import requests
-import feedparser
-from google.oauth2.credentials import Credentials
+.credentials import Credentials
 from google.auth.transport.requests import Request
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 def main():
-    rss_url = 'http://fetchrss.com/rss/66924131383244f7540a82546692410109547ffc7409ebb3.xml'
+    rss_url = 'http://fetchrss.com/rss/66924131383244f7540a82546692410109547ffc7409ebb3.xml'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
     feed = feedparser.parse(rss_url)
 
+    # طباعة عنوان الـ Feed
     print(f"Feed title: {feed.feed.title if 'title' in feed.feed else 'No title found'}")
+    
+    # طباعة جميع البيانات التي تم تحليلها
     print("Feed parsed:", feed)
     print("Feed entries:", feed.entries)
+
+    # طباعة عدد العناصر في الـ Feed
     print(f"Number of entries in feed: {len(feed.entries)}")
 
+    # التحقق مما إذا كانت القائمة فارغة
     if not feed.entries:
         print("No entries found in RSS feed.")
         return
@@ -23,45 +24,13 @@ def main():
     latest_entry = feed.entries[0]
     post_title = latest_entry.title
     post_content = latest_entry.summary
-    post_link = latest_entry.link  # لنفترض أن الرابط يحتوي على رابط صورة
-    post_image = latest_entry.media_content[0]['url'] if 'media_content' in latest_entry else ''
-
-    # تعديل تنسيق المحتوى حسب احتياجاتك
-    formatted_content = f"""
-    <span><!--more--></span>
-    <div class="separator" style="clear: both;">
-        <a href="{post_link}" style="display: block; padding: 1em 0; text-align: center;">
-            <img alt="" border="0" height="200" src="{post_image}" style="display: block; padding: 1em 0; text-align: center;">
-        </a>
-    </div>
-
-    <div id="custom-hero" style="clear: both;">
-        <img alt="" border="0" src="{post_image}"/>
-    </div>
-    
-    <p id="synopsis">{post_content}</p>
-    
-    <div id='extra-info'>
-      <div class="y6x11p">الفصول <span class="dt"></span></div>
-      <div class="y6x11p">ثاريخ النشر<span class="dt">2024</span></div>
-      <div class="y6x11p">النوع <span class="dt">مانهوا كورية</span></div>
-      <div class="y6x11p">الكاتب <span class="dt">غير معروف</span></div>
-      <div class="y6x11p">الرسام <span class="dt">غير معروف</span></div>
-    </div>
-
-    <div id="clwd" class="bixbox bxcl epcheck">
-      <script>
-        clwd.run('{post_title} مترجمة');
-      </script>
-    </div>
-    """
 
     blog_id = '3757445964290119377'
     url = f'https://www.googleapis.com/blogger/v3/blogs/{blog_id}/posts/'
 
-    client_id = os.getenv('BLOGGER_CLIENT_ID')
-    client_secret = os.getenv('BLOGGER_CLIENT_SECRET')
-    refresh_token = os.getenv('BLOGGER_REFRESH_TOKEN')
+    client_id = '488265298884-hq0v48o7b0o8j0flv19gqmqels2b70o3.apps.googleusercontent.com'
+    client_secret = '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'
+    refresh_token = '1//041s-JRMa6Dq8CgYIARAAGAQSNwF-L9IrcL0V8VdALDH9vP1P32ajfKRJjaBwQjqcCN6MgpvRu_YrOFLYa0cZFRBnmmZBu-Ts6rw'
 
     creds = Credentials(
         None,
@@ -79,7 +48,7 @@ def main():
     
     post_data = {
         'title': post_title,
-        'content': formatted_content,
+        'content': post_content,
     }
 
     response = requests.post(url, headers=headers, json=post_data)
@@ -87,3 +56,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
