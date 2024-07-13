@@ -3,7 +3,7 @@ import requests
 from google.auth.transport.requests import Request
 
 def main():
-    rss_url = 'http://fetchrss.com/rss/66924131383244f7540a82546692410109547ffc7409ebb3.xml'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
+    rss_url = 'https://fl-ares.com/'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
     feed = feedparser.parse(rss_url)
 
     # طباعة عنوان الـ Feed
