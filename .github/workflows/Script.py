@@ -5,7 +5,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
 def main():
-    rss_url = 'https://example.com/rss'
+    rss_url = 'https://like-manga.net/'
     feed = feedparser.parse(rss_url)
     latest_entry = feed.entries[0]
 
