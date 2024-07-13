@@ -4,7 +4,7 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
 def main():
-    rss_url = 'https://like-manga.net/feed/'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
+    rss_url = 'https://like-manga.net/'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
     feed = feedparser.parse(rss_url)
 
     # طباعة عنوان الـ Feed
