@@ -1,14 +1,20 @@
 import requests
 import feedparser
-import google.auth
-from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
 
 def main():
-    rss_url = 'https://like-manga.net/'
+    rss_url = 'https://like-manga.net/'  # ضع هنا URL لـ RSS Feed الخاص بموقعك
     feed = feedparser.parse(rss_url)
-    latest_entry = feed.entries[0]
 
+    # إضافة سجل لطباعة عدد العناصر في الـ Feed
+    print(f"Number of entries in feed: {len(feed.entries)}")
+
+    if not feed.entries:
+        print("No entries found in RSS feed.")
+        return
+
+    latest_entry = feed.entries[0]
     post_title = latest_entry.title
     post_content = latest_entry.summary
 
@@ -37,7 +43,7 @@ def main():
         'title': post_title,
         'content': post_content,
     }
-    
+
     response = requests.post(url, headers=headers, json=post_data)
     print(response.status_code, response.json())
 
