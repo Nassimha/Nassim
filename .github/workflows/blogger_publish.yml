@@ -30,4 +30,4 @@ jobs:
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
       run: |
-        python script.py
+        python .github/workflows/Script.py
