@@ -18,12 +18,12 @@ def main():
     post_title = latest_entry.title
     post_content = latest_entry.summary
 
-    blog_id = 'YOUR_BLOGGER_BLOG_ID'
+    blog_id = '3757445964290119377'
     url = f'https://www.googleapis.com/blogger/v3/blogs/{blog_id}/posts/'
 
-    client_id = 'YOUR_CLIENT_ID'
-    client_secret = 'YOUR_CLIENT_SECRET'
-    refresh_token = 'YOUR_REFRESH_TOKEN'
+    client_id = '488265298884-hq0v48o7b0o8j0flv19gqmqels2b70o3.apps.googleusercontent.com'
+    client_secret = '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'
+    refresh_token = '1//041s-JRMa6Dq8CgYIARAAGAQSNwF-L9IrcL0V8VdALDH9vP1P32ajfKRJjaBwQjqcCN6MgpvRu_YrOFLYa0cZFRBnmmZBu-Ts6rw'
 
     creds = Credentials(
         None,
