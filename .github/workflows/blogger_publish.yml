@@ -1,13 +1,14 @@
-name: Publish Manga to Blogger
+name: Publish Website Content to Blogger
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 0 * * *'  # هذا الجدول يقوم بتشغيل العمل مرة كل يوم في منتصف الليل
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository content
         uses: actions/checkout@v2
@@ -20,6 +21,12 @@ jobs:
       - name: Install dependencies
         run: |
           pip install requests google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+      - name: Fetch Website Content
+        env:
+          WEBSITE_URL: ${{ secrets.WEBSITE_URL }}
+        run: |
+          python fetch_website_content.py
 
       - name: Publish to Blogger
         env:
