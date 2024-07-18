@@ -2,7 +2,7 @@ import os
 import requests
 
 # إعداد URL موقع الويب
-WEBSITE_URL = os.getenv('URL')
+WEBSITE_URL = os.getenv('WEBSITE_URL')
 
 # دالة لجلب المحتوى من موقع الويب
 def fetch_website_content():
