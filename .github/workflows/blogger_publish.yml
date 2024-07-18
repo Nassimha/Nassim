@@ -1,33 +1,29 @@
-#name: Publish Manga to Blogger
+name: Publish Manga to Blogger
 
-#on:
- # schedule:
-  #- cron: '* * * * *'  # يشغل الكود كل ساعة. يمكنك تعديل الجدول حسب احتياجاتك.
-  workflow_dispatch:
+on:
+  push:
+    branches:
+      - main
 
-#jobs:
+jobs:
   publish:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository content
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests feedparser google-auth beautifulsoup4
+      - name: Install dependencies
+        run: |
+          pip install requests google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
-    - name: Run script
-      env:
-        BLOG_ID: ${{ secrets.BLOGGER_BLOG_ID }}
-        CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-      run: |
-        python Script.py
+      - name: Publish to Blogger
+        env:
+          BLOGGER_API_KEY: ${{ secrets.BLOGGER_API_KEY }}
+          BLOGGER_BLOG_ID: ${{ secrets.BLOGGER_BLOG_ID }}
+        run: |
+          python publish_to_blogger.py
